@@ -16,7 +16,7 @@ export default function Page() {
             <Image src={logoImg} alt="logoImg" width={180} height={180} />
 
             {/* ชื่อ + รายละเอียด */}
-            <h1 className="mt-5 text-lg font-bold">
+            <h1 className="mt-5 text-2xl font-bold">
                 เครื่องมือคำนวณออนไลน์
             </h1>
             <h3 className="mt-3 text-lg font-bold  text-gray-500">
