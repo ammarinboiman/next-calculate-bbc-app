@@ -1,89 +1,133 @@
+"use client";
+
 import NavBar from "@/components/NavBar";
 import Image from "next/image";
-import bmrImg from "@/assets/bmr.png"
-import { Linden_Hill } from "next/font/google";
+import bmr from "@/assets/bmr.png";
 import Link from "next/link";
 import Footer from "@/components/Footer";
+import { useState } from "react";
+import Swal from "sweetalert2"
 
+ 
 export default function Page() {
-    return (
-        <>  
-            {/* เเสดง NavBar */}
-            <NavBar/>
+    // create state
+    const [weight, setWeight] =  useState("");
+    const [height, setHeight] =  useState("");
+    const [age, setAge] =  useState("");
+    const [gender, setGender] =  useState("male");
+    const [bmrValue, setBmrValue] =  useState("0.00");
 
-            {/* เเสดงเนื้อหาของหน้า BMI */}
-            <div className="w-3/5 flex flex-col items-center
-                            mx-auto mt-15 shadow-xl p-10 rounded-lg
-                            border border-gray-200">
-            {/* เเสดงหัวข้อการคำนวณเเละรูป */}
-                <h1 className="text-2xl font-bold">
-                    BMI Calculator
-                </h1>
-                <h3 className="text-gray-500">
-                    คำนวณ BMR
-                </h3>
-                 <Image src={bmrImg} alt="logoImg" width={100} height={100} className="my-5" />
+     //Validation input data
+     const handleCalBmrClick = () =>{
+        if (weight === "" || height === "") {
+            Swal.fire({
+                icon: 'warning',
+                title: 'คำเตือน',
+                text: 'กรุณาป้อนน้ำหนักส่วนสูงให้ครบ',
+                confirmButtonText: 'ตกลง'
+    
+            });
+            return;
+     }
+        //คำนวณ bmr เเละเสดงผล ชาย
+        if (gender === 'male') {
+            const h = parseFloat(height);
+            const w = parseFloat(weight);
+            const a = parseFloat(age);
+            const bmr = 66 + (13.75 * w ) + (5 * h) - (6.8 * a );
+            setBmrValue(bmr.toFixed(2));
 
-            {/* ส่วนของการป้อนหรือเลือก */}
-            <div className="w-full flex flex-col">
-                <h3 className="font-bold">
-                    ป้อนน้ำหนัก (กิโลกรัม)
-                </h3>
-                <input type="number" placeholder="เช่น 65.85" 
-                        className="p-3 border border-gray-200 rounded mt-2"/>
-                <h3 className="font-bold mt-4">
-                    ป้อนส่วนสูง (เซ็นติเมตร)
-                </h3>
-                <input type="number" placeholder="เช่น 175.55" 
-                        className="p-3 border border-gray-200 rounded mt-2"/>
-                <h3 className="font-bold mt-4">
-                    ป้อนอายุ (ปี)
-                </h3>
-                <input type="number" placeholder="เช่น 25" 
-                        className="p-3 border border-gray-200 rounded mt-2"/>
-                <div className="flex flex-col gap-2">
+        } else {
+            //คำนวณ bmr เเละเสดงผล หญิง
+            const h = parseFloat(height);
+            const w = parseFloat(weight);
+            const a = parseFloat(age);
+            const bmr = 665 + (9.6* w ) + (1.8 * h) - (4.7 * a );
+            setBmrValue(bmr.toFixed(2));
+        }}
 
-                <h3 className="font-bold mt-4" >เพศ</h3>
-                <div className="flex items-center gap-2 ">
-                <input type="radio" name="gender" className="w-4 h-4 bg-white cursor-pointer" />
-                <h3>ชาย</h3>
-                </div>
-                 <div className="flex items-center gap-2">
-                    <input type="radio" name="gender" className="w-4 h-4 bg-white cursor-pointer" />
-                <h3>หญิง</h3>
-                </div>
-                </div>
-            </div>
-
-            {/* ส่วนของปุ่ม คำนวณ */}
-            <div className="w-full mt-5 flex justify-center gap-5">
-                <button className="w-full mt-5 py-3 bg-purple-500 rounded text-white
-                                hover:bg-purple-700 cursor-pointer font-bold ">
-                คำนวณ BMR
-            </button>
-            {/* ส่วนของปุ่ม reset */}
-            <button className="w-full mt-5 py-3 bg-red-400 rounded text-white
-                                hover:bg-gray-700 cursor-pointer font-bold">
-                รีเซ็ต
-            </button>
-            </div>            
-
-            {/* ส่วนของการเเสดงผล BMR */}
-            <div className="w-full flex justify-center gap-5 mt-5">
-                <h3>ค่า BMR ที่คำนวณได้</h3>
-                <h3 className="font-bold text-blue-500 text-2xl">
-                    0.00
-                </h3>
-            </div>
-
-            {/* ส่วนของปุ่มกลับหน้าหลัก ซึ่งเป็น Link */}
-            <Link href="/" className="w-full mt-5 py-3 bg-gray-500 rounded
-                                        hover:bg-gray-700 text-center text-white">
-                 กลับไปหน้าหลัก                           
-                
-            </Link>
-            <Footer/>
-            </div>
-        </>
-    );
-};
+        //function resetclick
+        const handleResetClick = () => {
+        // reset ค่าใน state ให้เป็นเหมือนเดิมเริ่มต้น
+        setHeight("");
+        setWeight("");
+        setGender("male");
+        setBmrValue("0.00");
+        }
+        return (
+    <>
+      {/*แสดง NavBar*/}
+      <NavBar />
+      {/*แสดงหน้าเนื้อหา ของหน้า BMI*/}
+      <div className="w-3/5 flex flex-col items-center mx-auto mt-10 p-10 shadow-xl rounded-lg">
+        {/*แสดงหัวข้อการคำนวณและรูป*/}
+        <h1 className="text-2xl">BMR Calculator</h1>
+        <h3 className="text-gray-500">คำนวณ BMR</h3>
+        <Image src={bmr} alt="bmrimg" width={95} height={95} className="my-5" />
+        {/*ส่วนของการป้อนหรือเลือก*/}
+        <div className="w-full flex flex-col">
+          <h3 className="font-bold">ป้อนน้ำหนัก (กิโลกกรัม)</h3>
+          <input value={weight} onChange={(e) => setWeight(e.target.value)}
+            type="number"
+            placeholder="เช่น 65.65"
+            className="p-3 border-gray-300 rounded mt-2 border"
+          />
+          <h3 className="font-bold mt-3">ป้อนส่วนสูง (เซ็นติเมตร)</h3>
+          <input value={height} onChange={(e) => setHeight(e.target.value)}
+            type="number"
+            placeholder="เช่น 170"
+            className="p-3 border-gray-300 rounded mt-2 border"
+          />
+          <h3 className="font-bold  mt-3">ป้อนอายุ(0)</h3>
+          <input value={age} onChange={(e) => setAge(e.target.value)}
+            type="number"
+            placeholder="เช่น 25"
+            className="p-3 border-gray-300 rounded mt-2 border"
+          />
+          <h3 className="font-bold  mt-3">เพศ</h3>
+          <div>
+            <input onChange={(e) => setGender(e.target.value)}
+                    checked = {gender === "male"}
+                    type="radio" name="gender" value="male" className="mr-2" />
+            ชาย
+            <input  onChange={(e) => setGender(e.target.value)}
+                    checked = {gender === "female"}
+                    type="radio" name="gender" value="female" className="mx-2" />
+            หญิง
+          </div>
+        </div>
+ 
+        <div className="flex gap-3 w-full  justify-center ">
+          {/*ส่วนของปุ่ม คำนวณ*/}
+          <button onClick={handleCalBmrClick}
+                className=" mt-3 p-3 bg-red-400 rounded hover:bg-red-600
+                              text-whitecursor-pointer">
+            คำนวณ BMR
+          </button>
+          {/*ส่วนของปุ่ม รีเซ็ต*/}
+          <button onClick={handleResetClick}
+                    className=" mt-3 p-3 bg-amber-400 rounded hover:bg-amber-600
+                              text-white cursor-pointer">
+            Reset
+          </button>
+        </div>
+ 
+        {/*ส่วนของการแสดง BMR*/}
+        <div className="w-full flex flex-col items-center justify-center gap-3 mt-5">
+          <h3>ค่า BMR ที่คำนวณได้</h3>
+          <h3 className="font-bold text-blue-400 text-4xl">{bmrValue}</h3>
+        </div>
+ 
+        {/* ส่วนของปุ่ม กลับหน้าหลัก ซึ่งเป็น Link*/}
+        <Link
+          href="/"
+          className="w-full mt-5 py-3 bg-gray-500 rounded
+                                  hover:bg-gray-700 text-center text-white"
+        >
+          กลับไปหน้าหลัก
+        </Link>
+      </div>
+      <Footer />
+    </>
+  );
+}
