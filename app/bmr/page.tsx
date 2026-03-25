@@ -10,7 +10,7 @@ import Swal from "sweetalert2"
 
  
 export default function Page() {
-    // create state
+    // create state gg
     const [weight, setWeight] =  useState("");
     const [height, setHeight] =  useState("");
     const [age, setAge] =  useState("");
